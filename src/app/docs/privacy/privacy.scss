@@ -1,0 +1,286 @@
+/* src/app/pages/whitepaper/whitepaper.scss */
+
+/* —— 主题变量（沿用全站变量，缺省给兜底） —— */
+:root {
+    --wp-text: var(--text, #0f172a);
+    --wp-muted: var(--muted, #475569);
+    --wp-brand: var(--brand, #2563eb);
+    --wp-border: var(--border, #e2e8f0);
+    --wp-card: #ffffff;
+    --wp-zebra: #f8fafc;
+    --wp-quote: #f1f5f9;
+}
+
+/* 页面容器 */
+.page.whitepaper {
+    height: 100vh;
+    overflow: auto;
+    background: url('../../../assets/svg/bg.svg') no-repeat center top;
+    background-size: 1600px auto;
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: clamp(16px, 3vw, 32px);
+
+        .title {
+            margin: 0 auto;
+        }
+    }
+
+    /* 状态提示 */
+    .wp-status {
+        border: 1px solid var(--wp-border);
+        border-radius: 14px;
+        padding: 12px 14px;
+        background: var(--wp-card);
+        color: var(--wp-text);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 14px;
+
+        &--error {
+            border-color: #fecaca;
+            background: #fff1f2;
+        }
+    }
+
+    /* 正文区域（“读者模式”） */
+    .md {
+        /* 阅读宽度与居中 */
+        width: min(72ch, 100%);
+        margin-inline: auto;
+
+        /* 字体与段落节奏 */
+        font-size: clamp(17px, 1.05rem + 0.25vw, 19px);
+        line-height: 1.82;
+        color: var(--wp-text);
+        letter-spacing: 0.01em;
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+
+        /* 标题层级 */
+        h1,
+        h2,
+        h3 {
+            color: var(--wp-text);
+            font-weight: 800;
+            line-height: 1.25;
+            scroll-margin-top: 96px;
+            /* 锚点偏移，避开固定头部 */
+            margin-top: clamp(22px, 3.2vw, 38px);
+            margin-bottom: clamp(10px, 1.6vw, 16px);
+        }
+
+        h1 {
+            font-size: clamp(28px, 2.4rem, 40px);
+            letter-spacing: -0.01em;
+        }
+
+        h2 {
+            font-size: clamp(22px, 1.6rem, 28px);
+        }
+
+        h3 {
+            font-size: clamp(18px, 1.25rem, 22px);
+            color: var(--wp-muted);
+        }
+
+        /* 小标题/元信息 */
+        h4,
+        h5,
+        h6 {
+            font-weight: 700;
+            color: var(--wp-muted);
+            margin: 18px 0 8px;
+        }
+
+        /* 段落、列表 */
+        p {
+            margin: 0 0 0.9em;
+        }
+
+        ul,
+        ol {
+            margin: 0.6em 0 1em 1.25em;
+        }
+
+        li {
+            margin: 0.25em 0;
+        }
+
+        li>p {
+            margin: 0.25em 0;
+        }
+
+        /* 链接 */
+        a {
+            color: var(--wp-brand);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            text-decoration-thickness: from-font;
+            transition: color .15s ease;
+        }
+
+        a:hover {
+            color: color-mix(in oklab, var(--wp-brand), black 8%);
+        }
+
+        /* 代码块与行内代码 */
+        code,
+        pre,
+        kbd,
+        samp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.92em;
+        }
+
+        code {
+            background: #f6f7fb;
+            padding: .15em .35em;
+            border-radius: .4rem;
+        }
+
+        pre {
+            background: #0b1020;
+            color: #e5e7eb;
+            padding: 14px 16px;
+            border-radius: 14px;
+            overflow: auto;
+            box-shadow: var(--shadow-sm);
+            margin: 12px 0 16px;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* 引用块 */
+        blockquote {
+            margin: 14px 0;
+            padding: 10px 14px;
+            border-left: 4px solid #94a3b8;
+            background: var(--wp-quote);
+            color: #334155;
+            border-radius: 8px;
+        }
+
+        /* 表格 */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 14px 0 18px;
+            background: var(--wp-card);
+            border: 1px solid var(--wp-border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        thead th {
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+        }
+
+        th,
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--wp-border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--wp-zebra);
+        }
+
+        /* 图片与图注 */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 2px 18px rgba(0, 0, 0, .06);
+            margin: 8px 0 12px;
+        }
+
+        figure {
+            margin: 12px 0;
+        }
+
+        figcaption {
+            font-size: .9em;
+            color: var(--wp-muted);
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        /* 分隔线 */
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--wp-border);
+            margin: 20px 0;
+        }
+
+        /* 脚注/小字 */
+        small,
+        .note {
+            color: var(--wp-muted);
+            font-size: .9em;
+        }
+
+        /* 锚点链接 hover 提示（需要你在标题内插入 <a class="anchor">#</a> 才可点击） */
+        h1:hover .anchor,
+        h2:hover .anchor,
+        h3:hover .anchor {
+            opacity: 1;
+        }
+
+        .anchor {
+            margin-left: .4rem;
+            font-weight: 400;
+            opacity: 0;
+            transition: opacity .15s ease;
+            text-decoration: none;
+            color: var(--wp-muted);
+        }
+    }
+
+    /* 移动端收窄时的舒适度 */
+    @media (max-width: 640px) {
+        .md {
+            width: min(88ch, 100%);
+            font-size: clamp(16px, 1rem + 0.4vw, 18px);
+            line-height: 1.9;
+            padding-inline: 2px;
+        }
+    }
+
+    /* 暗色模式 */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --wp-text: #e5e7eb;
+            --wp-muted: #94a3b8;
+            --wp-border: #334155;
+            --wp-card: #0b1220;
+            --wp-zebra: #0f172a;
+            --wp-quote: #111827;
+        }
+
+        .md pre {
+            background: #0a0f1d;
+            color: #dbeafe;
+        }
+
+        .md table {
+            background: var(--wp-card);
+        }
+    }
+}

@@ -1,0 +1,106 @@
+<section class="container stack-6">
+    <!-- Hero -->
+    <header class="stack-3">
+        <h1 class="h1">Contact Skreeb</h1>
+        <p class="muted">Pick a topic, leave your email and message. Safety reports are prioritized.</p>
+    </header>
+
+    <!-- Quick lanes -->
+    <section class="grid-2">
+        <a class="card link" routerLink="/support">
+            <h3>Support</h3>
+            <p>Account, orders, payments, milestones</p>
+        </a>
+        <a class="card link" routerLink="/safety">
+            <h3>Safety / Report</h3>
+            <p>IP violations, harassment, scams, minor protection</p>
+        </a>
+        <a class="card link" routerLink="/partnerships">
+            <h3>Partnerships</h3>
+            <p>Channels, brands, communities, universities</p>
+        </a>
+        <a class="card link" routerLink="/press">
+            <h3>Press</h3>
+            <p>Interviews, assets, factsheet</p>
+        </a>
+        <a class="card link" routerLink="/legal">
+            <h3>Legal</h3>
+            <p>DMCA/IP, terms & compliance</p>
+        </a>
+    </section>
+
+    <!-- Universal form -->
+    <form class="card stack-4" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="field">
+            <label for="email">Email *</label>
+            <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+            @if (submitted() && f.email.invalid) {
+            <small class="error">Valid email is required.</small>
+            }
+        </div>
+
+        <div class="field">
+            <label for="role">Your role</label>
+            <select id="role" formControlName="role">
+                @for (r of roles; track r) {
+                <option [value]="r">{{ r }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="topic">Topic *</label>
+            <select id="topic" formControlName="topic">
+                @for (t of topics; track t) {
+                <option [value]="t">{{ t }}</option>
+                }
+            </select>
+            @if (submitted() && f.topic.invalid) {
+            <small class="error">Please select a topic.</small>
+            }
+        </div>
+
+        <div class="field">
+            <label for="message">Message *</label>
+            <textarea id="message" rows="6" maxlength="2000" formControlName="message"
+                placeholder="Describe the issue or request. Links and timestamps help."></textarea>
+            @if (submitted() && f.message.invalid) {
+            <small class="error">Please enter at least 10 characters (max 2000).</small>
+            }
+        </div>
+
+        <label class="row-2 agree">
+            <input type="checkbox" formControlName="agree" style="width: 10px;" />
+            <span>I agree to the Terms &amp; Privacy</span>
+        </label>
+        @if (submitted() && f.agree.invalid) {
+        <small class="error">You must agree to continue.</small>
+        }
+
+        <button class="btn btn-primary" style="cursor: pointer;" type="submit" [disabled]="submitting()">Submit</button>
+
+        @if (errorMsg()) { <p class="error mt-1">{{ errorMsg() }}</p> }
+        @if (!errorMsg() && submitted() && !submitting() && form.pristine) {
+        <p class="success mt-1">Thanks! We typically reply within 48 hours. Safety reports are handled first.</p>
+        }
+    </form>
+
+    <!-- Direct inboxes -->
+    <section class="card Direct">
+        <h2 class="h2">Direct inboxes</h2>
+        <ul class="list">
+            <li>General: <a href="mailto:hello@skreeb.io">hello@skreeb.io</a></li>
+            <li>Safety/Abuse: <a href="mailto:safety@skreeb.io">safety@skreeb.io</a></li>
+            <li>Legal/DMCA: <a href="mailto:legal@skreeb.io">legal@skreeb.io</a></li>
+            <li>Press: <a href="mailto:press@skreeb.io">press@skreeb.io</a></li>
+        </ul>
+    </section>
+
+    <!-- Compliance note -->
+    <section class="card Compliance">
+        <p class="muted">
+            Please don’t send sensitive IDs or full bank numbers. For reports, include links, screenshots, and time
+            stamps.
+        </p>
+    </section>
+</section>

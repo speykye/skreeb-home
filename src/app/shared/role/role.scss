@@ -1,0 +1,124 @@
+:host {
+    display: contents;
+}
+
+.sk-btn {
+    font: 500 14px/1 var(--sk-font-sans);
+    color: var(--sk-panel);
+    background: var(--sk-primary);
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: transform var(--sk-trans), opacity var(--sk-trans);
+}
+
+.sk-btn--ghost {
+    background: transparent;
+    color: var(--sk-muted);
+    border: 1px solid var(--sk-card-border);
+}
+
+.sk-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+}
+
+.sk-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 19, 22, .42);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+.sk-modal__panel {
+    position: relative;
+    margin: 6vh auto 0;
+    max-width: 760px;
+    background: var(--sk-panel);
+    color: var(--sk-text);
+    border-radius: var(--sk-radius);
+    box-shadow: var(--sk-shadow);
+    padding: 28px;
+    width: calc(100% - 24px);
+    animation: sk-pop var(--sk-trans);
+}
+
+@keyframes sk-pop {
+    from {
+        transform: translateY(8px);
+        opacity: 0;
+    }
+
+    to {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+.sk-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--sk-card-border);
+    background: var(--sk-panel);
+    cursor: pointer;
+}
+
+.sk-title {
+    margin: 0 8px 4px;
+    font: 700 22px/1.2 var(--sk-font-sans);
+}
+
+.sk-subtitle {
+    margin: 0 8px 18px;
+    color: var(--sk-muted);
+    font: 400 14px/1.6 var(--sk-font-sans);
+}
+
+.sk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 640px) {
+    .sk-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sk-card {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 14px;
+    align-items: center;
+    background: var(--sk-card);
+    border: 1px solid var(--sk-card-border);
+    border-radius: var(--sk-radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: transform var(--sk-trans), box-shadow var(--sk-trans), border-color var(--sk-trans);
+    outline: none;
+}
+
+.sk-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--sk-shadow);
+    border-color: #dcdde3;
+}
+
+.sk-card:focus {
+    box-shadow: var(--sk-focus), var(--sk-shadow);
+}
+
+.sk-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}

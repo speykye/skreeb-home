@@ -1,0 +1,8 @@
+<section id="whitepaper" class="page whitepaper">
+  <div class="container">
+    @if (error()) {
+        <div class="wp-status wp-status--error">{{ error() }}</div>
+    }
+    <article #content class="md" [innerHTML]="html"></article>
+  </div>
+</section>

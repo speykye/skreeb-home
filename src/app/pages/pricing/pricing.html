@@ -1,0 +1,91 @@
+<section class="hero">
+  <div class="content">
+    <h1>Fees, tiers, and the cap</h1>
+    <p>No subscriptions for MVP. Fees apply only when you earn.</p>
+  </div>
+</section>
+
+<section class="calc" id="calculator">
+  <div class="section-head">
+    <h2>Try the calculator</h2>
+    <p>Enter an order amount to see the applied tier and what the creator receives.</p>
+  </div>
+  <div class="calc-card">
+    <app-commission-tier></app-commission-tier>
+  </div>
+  <small class="note">Order amount uses the <b>Platform Base</b>: order total minus pass-through fees and taxes.</small>
+</section>
+
+<section class="how">
+  <h2>How the fee is calculated</h2>
+  <ol class="steps">
+    <li><b>Platform Base</b> = order total − pass-through fees (store/processor) − taxes.</li>
+    <li><b>Whole-order tiering</b> locks at order creation based on the Platform Base.</li>
+    <li><b>Tier-4 cap</b>: when the 10% tier applies, platform fee is capped at <b>$1,000</b>.</li>
+    <li><b>Milestones</b>: the order’s total fee is allocated pro-rata across milestones.</li>
+    <li><b>Promotions/Points</b> apply to the platform fee (subject to limits), then rounded to minor units.</li>
+  </ol>
+</section>
+
+<section class="examples" id="examples">
+  <h2>Examples</h2>
+
+  <div class="ex">
+    <h3>$100 (web checkout)</h3>
+    <ul>
+      <li>Platform Base: $100</li>
+      <li>Tier: 3% → Platform fee $3.00</li>
+      <li>Creator receives: ~$97 (before tax withholding)</li>
+    </ul>
+  </div>
+
+  <div class="ex">
+    <h3>$750 (web checkout)</h3>
+    <ul>
+      <li>Base: $750 → Tier: 5%</li>
+      <li>Platform fee: $37.50</li>
+      <li>Creator receives: $712.50 (before withholdings)</li>
+    </ul>
+  </div>
+
+  <div class="ex">
+    <h3>$4,000 (web checkout)</h3>
+    <ul>
+      <li>Base: $4,000 → Tier: 7%</li>
+      <li>Platform fee: $280.00</li>
+      <li>Creator receives: $3,720.00</li>
+    </ul>
+  </div>
+
+  <div class="ex cap">
+    <h3>$12,000 (in-app, 15% store fee)</h3>
+    <ul>
+      <li>Pass-through: store fee $1,800 → <b>Platform Base $10,200</b></li>
+      <li>Tier: 10% → $1,020 but <b>capped at $1,000</b></li>
+      <li>Creator receives: $12,000 − 1,800 − 1,000 = <b>$9,200</b> (before withholdings)</li>
+    </ul>
+  </div>
+
+  <p class="disclaimer">Examples are illustrative only. Final amounts follow the Terms of Service §18.</p>
+</section>
+
+<section class="faq" id="faq">
+  <h2>FAQ</h2>
+  <details>
+    <summary>Does the $1,000 cap apply to all tiers?</summary>
+    <p>No. The cap applies only when the 10% tier (Tier 4) applies.</p>
+  </details>
+  <details>
+    <summary>Are store/processor fees capped?</summary>
+    <p>No. Pass-through fees (app-store or payment-processor) and taxes are separate and not subject to the platform cap.</p>
+  </details>
+  <details>
+    <summary>What happens on refunds or change orders?</summary>
+    <p>Refunds reverse the platform fee pro-rata. Approved change orders re-lock the tier prospectively for unpaid milestones.</p>
+  </details>
+</section>
+
+<section class="legal-links">
+  <a class="chip" (click)="goWhitePaper()">Read the whitepaper</a>
+  <a fragment="terms" class="chip" (click)="goFullFeePolicy()" >Full fee policy</a>
+</section>

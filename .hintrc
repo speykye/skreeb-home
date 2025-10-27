@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "color: color-mix(in oklab, var(--wp-brand), black 8%)"
+        ]
+      }
+    ],
+    "axe/structure": [
+      "default",
+      {
+        "list": "off"
+      }
+    ]
+  }
+}

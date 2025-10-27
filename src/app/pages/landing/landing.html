@@ -1,0 +1,173 @@
+<nav class="nav">
+    <div class="container nav-inner">
+        <div class="brand">
+            <img class="logo" src="../../../assets/icons/logo@64x64.png" title="skreeb" />
+            <span>Skreeb</span>
+        </div>
+        <div class="nav-menu">
+            <a (click)="scrollToHash('features')">Features</a>
+            <a (click)="scrollToHash('flow')">How it works</a>
+            <a routerLink="/whitepaper" class="hide-sm">Whitepaper</a>
+            <a routerLink="/docs" class="hide-sm">Docs</a>
+            <a class="nav-cta" (click)="go()">Pricing</a>
+        </div>
+        <div class="nav-cta">
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="container">
+        <div class="paper">
+            <span class="eyebrow"><span class="dot"></span> COMMISSION • COLLABORATE • CREATE</span>
+            <h1>MVP that solves real commissions.</h1>
+            <p class="lead">
+                Low fees, milestone-driven orders, escrowed payouts, and alert-driven inbox —
+                built for creators and clients to move fast with clarity.
+            </p>
+            <a class="btn btn--ghost" style="cursor: pointer;" (click)="readWhitepaper()">Read whitepaper</a>
+        </div>
+        <div class="tag-row">
+            <span class="tag">Login = Register (email / passkey*)</span>
+            <span class="tag">Milestones & escrow</span>
+            <span class="tag">Platform & Order alerts</span>
+            <span class="tag">Google Play payments</span>
+            <span class="tag">Tiered commission 3–10%</span>
+        </div>
+        <div class="trust">
+            <div class="trust-item">Audit-ready receipts</div>
+            <div class="trust-item">Creator storefronts</div>
+            <div class="trust-item">Dispute-safe flow</div>
+            <div class="trust-item">Global & mobile-first</div>
+        </div>
+    </div>
+</header>
+
+<section id="features" class="section">
+    <div class="container">
+        <div class="paper pad">
+            <h2>What ships in MVP</h2>
+            <p class="section-lead">Everything you need to run commissions end-to-end — nothing that slows you down.</p>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>Accounts & Profile</h3>
+                    <p>Sign in with email (passkey optional). Edit avatar, bio, and switch roles (Client / Creator).</p>
+                </div>
+                <div class="card">
+                    <h3>Creator Verification</h3>
+                    <p>Submit portfolio samples & basic KYC fields to unlock storefront & payouts.</p>
+                </div>
+                <div class="card">
+                    <h3>Offers & Listings</h3>
+                    <p>Publish commission offers. Clients can post briefs or pick predefined packages.</p>
+                </div>
+                <div class="card">
+                    <h3>Orders & Milestones</h3>
+                    <p>Structured stages with approvals; messages are bound to each order.</p>
+                </div>
+                <div class="card">
+                    <h3>Payments</h3>
+                    <p>Google Play at launch; auto receipts, money ledger, and withdrawals queue.</p>
+                </div>
+                <div class="card">
+                    <h3>Alerts</h3>
+                    <p>Platform (system) & Commission (order) alerts in a clean two-channel inbox.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="flow" class="section">
+    <div class="container">
+        <div class="paper pad">
+            <h2>How it works</h2>
+            <div class="stepper">
+                <div class="step">
+                    <h3>1) Brief ↔ Offer</h3>
+                    <p>Clients open a brief or choose a creator offer with clear scope & price.</p>
+                </div>
+                <div class="step">
+                    <h3>2) Milestones & Fund</h3>
+                    <p>Agree deliverables & deadlines; deposit goes to escrow. Alerts keep both sides on track.</p>
+                </div>
+                <div class="step">
+                    <h3>3) Deliver → Approve → Payout</h3>
+                    <p>Files, messages, approvals, and receipts live in the order. Commission tier applies
+                        automatically.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="band">
+            <h3 class="m0">Transparent fee schedule</h3>
+            <div class="quotes">
+                <div class="quote">$0–$500 → 3%</div>
+                <div class="quote">$500.1–$2000 → 5%</div>
+                <div class="quote">$2000.1–$5000 → 7%</div>
+                <div class="quote">$5000.1+ → 10% (cap $1000 per stage)</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="pricing" class="section">
+    <div class="container">
+        <div class="paper cta">
+            <div>
+                <h3>Start free. Build your first order in minutes.</h3>
+                <p style="margin-bottom: 50px;">No subscriptions required for MVP. Fees apply only when you earn.</p>
+                <div class="cta-actions">
+                    <a class="btn btn--light" (click)="tieredCommission()">View docs</a>
+                </div>
+            </div>
+            <app-commission-tier [amount]="750" [symbol]="'$'" [tiers]="tiers" [capCents]="capCents" [baseMode]="'net'"
+                [storeBps]="1500" (computed)="onFee($event)">
+            </app-commission-tier>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="paper pad">
+            <div class="foot-grid">
+                <div class="foot">
+                    <div class="brand mb8"><img style="width: 32px;height: 32px;" src="../../../assets/icons/logo@64x64.png" title="skreeb" /><span>Skreeb</span></div>
+                    <p class="muted">Commission & collaboration for real workflows.</p>
+                </div>
+                <div class="foot">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a routerLink="/docs">Docs</a>
+                    <a routerLink="/changelog">Changelog</a>
+                </div>
+                <div class="foot">
+                    <h4>Creators</h4>
+                    <a routerLink="/auth">Open a storefront</a>
+                    <a routerLink="/guides">Guides</a>
+                    <a routerLink="/community">Community</a>
+                </div>
+                <div class="foot">
+                    <h4>Company</h4>
+                    <a (click)="readWhitepaper()">Whitepaper</a>
+                    <a routerLink="/about">About</a>
+                    <a routerLink="/contact">Contact</a>
+                </div>
+                <div class="foot">
+                    <h4>Legal</h4>
+                    <a (click)="terms()">Terms</a>
+                    <a (click)="privacy()">Privacy</a>
+                    <a routerLink="/moderation">Moderation</a>
+                </div>
+            </div>
+            <div class="copyright">© {{ year }} Skreeb. All rights reserved.</div>
+        </div>
+    </div>
+</footer>
+
+<ng-template></ng-template>

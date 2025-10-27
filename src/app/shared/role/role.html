@@ -1,0 +1,47 @@
+@if (isOpen()) {
+<div class="sk-modal" role="dialog" aria-modal="true" aria-labelledby="sk-role-title">
+    <div class="sk-modal__backdrop" (click)="close()"></div>
+    <div class="sk-modal__panel" role="document">
+        <button class="sk-modal__close" aria-label="Close" (click)="close()">×</button>
+
+        <h2 id="sk-role-title" class="sk-title">Choose your role</h2>
+        <p class="sk-subtitle">You can switch anytime from the top-right menu.</p>
+
+        <div class="sk-grid">
+            <div class="sk-card" tabindex="0" aria-label="Choose Client" (click)="select('client')"
+                (keydown)="onCardKeydown($event, 'client')">
+                <div class="sk-card__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48">
+                        <path
+                            d="M9 6h6v2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h3V6zm2 0v2h2V6h-2z"
+                            fill="currentColor" />
+                    </svg>
+                </div>
+                <div class="sk-card__body">
+                    <h3>Client</h3>
+                    <p>Post briefs, manage orders, and pay securely.</p>
+                </div>
+            </div>
+
+            <div class="sk-card" tabindex="0" aria-label="Choose Creator" (click)="select('creator')"
+                (keydown)="onCardKeydown($event, 'creator')">
+                <div class="sk-card__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48">
+                        <path
+                            d="M3 17l6-1 9.5-9.5a1.5 1.5 0 0 0-2.1-2.1L7 14l-1 6-3-3zM5 19c1.5 0 2.5-1 2.5-2.5S6.5 14 5 14 2.5 15 2.5 16.5 3.5 19 5 19z"
+                            fill="currentColor" />
+                    </svg>
+                </div>
+                <div class="sk-card__body">
+                    <h3>Creator</h3>
+                    <p>Take commissions, showcase work, and track earnings.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sk-actions">
+            <button class="sk-btn sk-btn--ghost" (click)="skip()">Set up later</button>
+        </div>
+    </div>
+</div>
+}

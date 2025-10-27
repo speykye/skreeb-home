@@ -1,0 +1,69 @@
+<section class="container stack-6">
+    <!-- Hero -->
+    <header class="stack-3">
+        <h1 class="h1">A human-led commissioning platform. Fair by default.</h1>
+        <p class="muted">
+            Skreeb connects clients and creators with low, transparent fees and traceable milestones.
+            AI assists; people decide.
+        </p>
+        <div class="row-2">
+            <a class="btn btn-primary" routerLink="/get-started">Get Started</a>
+            <a class="btn btn-ghost" routerLink="/discord">Join Discord</a>
+        </div>
+    </header>
+
+    <!-- What problems we solve -->
+    <section class="card">
+        <h2 class="h2">What problems we solve</h2>
+        <ul class="list">
+            @for (p of problems; track p.title) {
+            <li><b>{{ p.title }}:</b> {{ p.desc }}</li>
+            }
+        </ul>
+    </section>
+
+    <!-- How we do it (MVP) -->
+    <section class="card">
+        <h2 class="h2">How we do it (MVP)</h2>
+        <ul class="list">
+            @for (item of mvp; track item) {
+            <li>{{ item }}</li>
+            }
+        </ul>
+    </section>
+
+    <!-- Roadmap -->
+    <section class="card">
+        <h2 class="h2">Roadmap</h2>
+        <ol class="list">
+            @for (step of roadmap; track step) {
+            <li>{{ step }}</li>
+            }
+        </ol>
+    </section>
+
+    <!-- Recent changes -->
+    <section class="card">
+        <div class="row-between">
+            <h2 class="h2">Recent changes</h2>
+            <small class="muted">Kept transparent. Updated as we ship.</small>
+        </div>
+        <ul class="list">
+            @for (c of recentChanges; track $index) {
+            <li>
+                @if (c.href) {
+                <a [routerLink]="c.href">{{ c.text }}</a>
+                } @else {
+                {{ c.text }}
+                }
+            </li>
+            }
+        </ul>
+    </section>
+
+    <!-- CTA -->
+    <footer class="stack-3">
+        <a class="btn btn-primary" routerLink="/brief/start">Start a Brief</a>
+        <a class="btn btn-ghost" routerLink="/creator/apply">Become a Creator</a>
+    </footer>
+</section>
