@@ -64,6 +64,20 @@ export class Landing {
     );
   }
 
+  about() {
+    this.roleSvc.enterOrAsk(
+      ['/about'],
+      {p_event_key: 'about', buttonId: 'About'}
+    );
+  }
+
+  contact() {
+    this.roleSvc.enterOrAsk(
+      ['/contact'],
+      {p_event_key: 'contact', buttonId: 'Contact'}
+    );
+  }
+
   async ngOnInit() {
   }
 }
