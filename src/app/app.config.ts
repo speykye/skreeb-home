@@ -4,6 +4,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { routes } from './app.routes';
 import { apiBaseUrlInterceptor, visitorAndLocaleInterceptor, apiErrorInterceptor } from './core/http/interceptors';
 import { loadingInterceptor } from './core/http/loading.interceptor';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,6 @@ export const appConfig: ApplicationConfig = {
         apiErrorInterceptor,
         loadingInterceptor
       ])
-    )
+    ), provideClientHydration(withEventReplay())
   ]
 };
