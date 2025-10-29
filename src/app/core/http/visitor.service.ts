@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { UniversalStorage } from '../universal-storage.service';
 
 const KEY = 'sk_vsid';
 
 @Injectable({ providedIn: 'root' })
 export class VisitorService {
+  private storage = inject(UniversalStorage);
   private id = this.ensure();
 
   private ensure() {
-    let v = localStorage.getItem(KEY);
+    let v = this.storage.getItem(KEY);
     if (!v) {
       v = crypto.randomUUID();
-      localStorage.setItem(KEY, v);
+      this.storage.setItem(KEY, v);
     }
     return v;
   }
@@ -19,6 +21,6 @@ export class VisitorService {
 
   // 你也可以把语言做切换持久化
   get locale() {
-    return localStorage.getItem('sk_locale') || navigator.language || 'en';
+    return this.storage.getItem('sk_locale') || navigator.language || 'en';
   }
 }

@@ -5,6 +5,7 @@ import { CommissionTier } from '../../components/commission-tier/commission-tier
 import { RecordEventService } from '../../core/services/record-event.service';
 import { firstValueFrom } from 'rxjs';
 import { RoleService } from '../../shared/role/role.service';
+import { UniversalStorage } from '../../core/universal-storage.service';
 
 type Identity = 'client' | 'creator';
 
@@ -16,6 +17,7 @@ type Identity = 'client' | 'creator';
   styleUrls: ['./pricing.scss'],
 })
 export class Pricing {
+  private storage = inject(UniversalStorage);
   private readonly roleSvc = inject(RoleService);
   private api = inject(RecordEventService);
   private route = inject(ActivatedRoute);
@@ -28,7 +30,7 @@ export class Pricing {
     const qpIdentity = qp.get('p_identity') as Identity | null;
 
     // 2) identity 回退：query -> localStorage -> 'client'
-    const lsIdentity = (safeGetLocal('skreeb.role') as Identity | null);
+    const lsIdentity = (this.safeGetLocal('skreeb.role') as Identity | null);
     const p_identity: Identity = (qpIdentity === 'client' || qpIdentity === 'creator')
       ? qpIdentity
       : (lsIdentity === 'client' || lsIdentity === 'creator')
@@ -69,9 +71,9 @@ export class Pricing {
       {p_event_key: 'legal-doc', buttonId: 'Full fee policy'}
     )
   }
-}
 
-/** 读取 localStorage 的小工具：非阻塞、容错 */
-function safeGetLocal(key: string): string | null {
-  try { return localStorage.getItem(key); } catch { return null; }
+  safeGetLocal(key: string): string | null {
+    try { return this.storage.getItem(key); } catch { return null; }
+  }
+
 }

@@ -3,6 +3,9 @@ import { inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { VisitorService } from './visitor.service';
 import { throwError, catchError } from 'rxjs';
+import { UniversalStorage } from '../universal-storage.service';
+
+
 
 export const apiBaseUrlInterceptor: HttpInterceptorFn = (req, next) => {
   // 只改写以 /api/ 开头的相对路径
@@ -15,14 +18,14 @@ export const apiBaseUrlInterceptor: HttpInterceptorFn = (req, next) => {
 
 export const visitorAndLocaleInterceptor: HttpInterceptorFn = (req, next) => {
   const vs = inject(VisitorService);
-
+  const storage = inject(UniversalStorage);
   const headers: Record<string, string> = {
     'X-Visitor-Id': vs.visitorId,
     'Accept-Language': vs.locale || environment.defaultLocale,
   };
 
   // 如未来接入登录，这里加 Bearer（如果没有就不加）
-  const token = localStorage.getItem('sk_access_token');
+  const token = storage.getItem('sk_access_token');
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
   req = req.clone({ setHeaders: headers });

@@ -5,8 +5,10 @@ import { DocsService } from '../docs.service';
 import { RecordEventService } from '../../core/services/record-event.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { UniversalStorage } from '../../core/universal-storage.service';
 
 type Identity = 'client' | 'creator';
+
 
 @Component({
   selector: 'app-whitepaper',
@@ -16,6 +18,7 @@ type Identity = 'client' | 'creator';
   styleUrls: ['./whitepaper.scss'],     // 注意复数
 })
 export class Whitepaper {
+  private storage = inject(UniversalStorage);
   private api = inject(DocsService);
   private s = inject(DomSanitizer);
   private destroyRef = inject(DestroyRef);  // 显式注入 DestroyRef
@@ -49,7 +52,7 @@ export class Whitepaper {
     const qpIdentity = qp.get('p_identity') as Identity | null;
 
     // 2) identity 回退：query -> localStorage -> 'client'
-    const lsIdentity = (safeGetLocal('skreeb.role') as Identity | null);
+    const lsIdentity = (this.safeGetLocal('skreeb.role') as Identity | null);
     const p_identity: Identity = (qpIdentity === 'client' || qpIdentity === 'creator')
       ? qpIdentity
       : (lsIdentity === 'client' || lsIdentity === 'creator')
@@ -111,10 +114,9 @@ export class Whitepaper {
 
     return doc.body.innerHTML;
   }
-  
-}
 
-/** 读取 localStorage 的小工具：非阻塞、容错 */
-function safeGetLocal(key: string): string | null {
-  try { return localStorage.getItem(key); } catch { return null; }
+  safeGetLocal(key: string): string | null {
+    try { return this.storage.getItem(key); } catch { return null; }
+  }
+
 }

@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ApiClient } from '../http/api-client.service';
 import { Observable } from 'rxjs';
+import { UniversalStorage } from '../universal-storage.service';
 
 export type Identity = 'client' | 'creator';
 
@@ -24,6 +25,8 @@ export interface RecordEventBody {
 
 @Injectable({ providedIn: 'root' })
 export class RecordEventService {
+    private storage = inject(UniversalStorage);
+    
     constructor(private api: ApiClient) { }
 
     recordEvent(payload: RecordEventBody): Observable<number> {
@@ -31,10 +34,10 @@ export class RecordEventService {
     }
 
     ensureSessionId(key = 'skreeb_session_id'): string {
-        let sid = localStorage.getItem(key);
+        let sid = this.storage.getItem(key);
         if (!sid) {
             sid = (crypto as any).randomUUID ? crypto.randomUUID() : this.uuidv4();
-            localStorage.setItem(key, sid);
+            this.storage.setItem(key, sid);
         }
         return sid;
     }

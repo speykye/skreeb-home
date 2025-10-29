@@ -3,11 +3,13 @@ import { DOCUMENT } from '@angular/common';
 import { Injectable, effect, inject, signal } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { NavMeta, ROLE_STORAGE_KEY, RouteTarget, SESSION_STORAGE_KEY, SkreebRole } from './role.types';
+import { UniversalStorage } from '../../core/universal-storage.service';
 
 const DEFAULT_IDENTITY: SkreebRole = 'client'; // “稍后设置”或未知时的默认身份
 
 @Injectable({ providedIn: 'root' })
 export class RoleService {
+  private storage = inject(UniversalStorage);
   private readonly doc = inject(DOCUMENT);
   private readonly router = inject(Router);
 
@@ -93,16 +95,16 @@ export class RoleService {
 
   // ── Helpers ─────────────────────────────────
   private hasSession(): boolean {
-    try { return !!localStorage.getItem(SESSION_STORAGE_KEY); } catch { return false; }
+    try { return !!this.storage.getItem(SESSION_STORAGE_KEY); } catch { return false; }
   }
   private readRole(): SkreebRole | null {
     try {
-      const v = localStorage.getItem(ROLE_STORAGE_KEY) as SkreebRole | null;
+      const v = this.storage.getItem(ROLE_STORAGE_KEY) as SkreebRole | null;
       return v === 'client' || v === 'creator' ? v : null;
     } catch { return null; }
   }
   private safeSet(key: string, val: string) {
-    try { localStorage.setItem(key, val); } catch {}
+    try { this.storage.setItem(key, val); } catch {}
   }
   private navigateWithParams(target: RouteTarget, meta: NavMeta, identity: SkreebRole) {
     const extras: NavigationExtras = {

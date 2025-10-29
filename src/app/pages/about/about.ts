@@ -2,9 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RecordEventService } from '../../core/services/record-event.service';
 import { firstValueFrom } from 'rxjs';
+import { UniversalStorage } from '../../core/universal-storage.service';
 
 type ChangeItem = { text: string, href?: string };
 type Identity = 'client' | 'creator';
+
 
 @Component({
   selector: 'app-about',
@@ -13,6 +15,7 @@ type Identity = 'client' | 'creator';
   styleUrl: './about.scss',
 })
 export class About {
+  private storage = inject(UniversalStorage);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private record = inject(RecordEventService);
@@ -52,7 +55,7 @@ export class About {
     const qpIdentity = qp.get('p_identity') as Identity | null;
 
     // 2) identity 回退：query -> localStorage -> 'client'
-    const lsIdentity = (safeGetLocal('skreeb.role') as Identity | null);
+    const lsIdentity = (this.safeGetLocal('skreeb.role') as Identity | null);
     const p_identity: Identity = (qpIdentity === 'client' || qpIdentity === 'creator')
       ? qpIdentity
       : (lsIdentity === 'client' || lsIdentity === 'creator')
@@ -114,9 +117,8 @@ export class About {
 
     return doc.body.innerHTML;
   }
-}
 
-/** 读取 localStorage 的小工具：非阻塞、容错 */
-function safeGetLocal(key: string): string | null {
-  try { return localStorage.getItem(key); } catch { return null; }
+  safeGetLocal(key: string): string | null {
+    try { return this.storage.getItem(key); } catch { return null; }
+  }
 }

@@ -5,8 +5,10 @@ import { DocsService } from '../docs.service';
 import { RecordEventService } from '../../core/services/record-event.service';
 import { firstValueFrom } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UniversalStorage } from '../../core/universal-storage.service';
 
 type Identity = 'client' | 'creator';
+
 
 @Component({
   selector: 'app-privacy',
@@ -15,6 +17,7 @@ type Identity = 'client' | 'creator';
   styleUrl: './privacy.scss',
 })
 export class Privacy {
+  private storage = inject(UniversalStorage);
   private api = inject(DocsService);
   private s = inject(DomSanitizer);
   private destroyRef = inject(DestroyRef);  // 显式注入 DestroyRef
@@ -48,7 +51,7 @@ export class Privacy {
     const qpIdentity = qp.get('p_identity') as Identity | null;
 
     // 2) identity 回退：query -> localStorage -> 'client'
-    const lsIdentity = (safeGetLocal('skreeb.role') as Identity | null);
+    const lsIdentity = (this.safeGetLocal('skreeb.role') as Identity | null);
     const p_identity: Identity = (qpIdentity === 'client' || qpIdentity === 'creator')
       ? qpIdentity
       : (lsIdentity === 'client' || lsIdentity === 'creator')
@@ -110,9 +113,9 @@ export class Privacy {
 
     return doc.body.innerHTML;
   }
+
+  safeGetLocal(key: string): string | null {
+    try { return this.storage.getItem(key); } catch { return null; }
+  }
 }
 
-/** 读取 localStorage 的小工具：非阻塞、容错 */
-function safeGetLocal(key: string): string | null {
-  try { return localStorage.getItem(key); } catch { return null; }
-}

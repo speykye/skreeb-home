@@ -4,8 +4,10 @@ import { ContactService } from './service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RecordEventService } from '../../core/services/record-event.service';
 import { firstValueFrom } from 'rxjs';
+import { UniversalStorage } from '../../core/universal-storage.service';
 
 type Identity = 'client' | 'creator';
+
 
 @Component({
   selector: 'app-contact',
@@ -14,6 +16,7 @@ type Identity = 'client' | 'creator';
   styleUrl: './contact.scss',
 })
 export class Contact {
+  private storage = inject(UniversalStorage);
   private api = inject(ContactService);
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -52,7 +55,7 @@ export class Contact {
     const qpIdentity = qp.get('p_identity') as Identity | null;
 
     // 2) identity 回退：query -> localStorage -> 'client'
-    const lsIdentity = (safeGetLocal('skreeb.role') as Identity | null);
+    const lsIdentity = (this.safeGetLocal('skreeb.role') as Identity | null);
     const p_identity: Identity = (qpIdentity === 'client' || qpIdentity === 'creator')
       ? qpIdentity
       : (lsIdentity === 'client' || lsIdentity === 'creator')
@@ -115,9 +118,8 @@ export class Contact {
     return doc.body.innerHTML;
   }
 
-}
+  safeGetLocal(key: string): string | null {
+    try { return this.storage.getItem(key); } catch { return null; }
+  }
 
-/** 读取 localStorage 的小工具：非阻塞、容错 */
-function safeGetLocal(key: string): string | null {
-  try { return localStorage.getItem(key); } catch { return null; }
 }
