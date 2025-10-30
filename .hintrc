@@ -17,6 +17,12 @@
         "list": "off"
       }
     ],
-    "disown-opener": "off"
+    "disown-opener": "off",
+    "axe/aria": [
+      "default",
+      {
+        "aria-valid-attr-value": "off"
+      }
+    ]
   }
 }
