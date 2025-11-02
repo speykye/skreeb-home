@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   apiBase: 'https://api.skreeb.io',
   defaultLocale: 'en-US',
   supabase: {

@@ -27,8 +27,7 @@ export const visitorAndLocaleInterceptor: HttpInterceptorFn = (req, next) => {
   // 如未来接入登录，这里加 Bearer（如果没有就不加）
   const token = storage.getItem('sk_access_token');
   if (token) headers['Authorization'] = `Bearer ${token}`;
-
-  req = req.clone({ setHeaders: headers });
+  req = req.clone({ setHeaders: headers, withCredentials: true });
   return next(req);
 };
 

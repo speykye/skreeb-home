@@ -4,6 +4,7 @@ import { LoadingOverlay } from './shared/loading/loading-overlay/loading-overlay
 import { Role } from './shared/role/role';
 import { isPlatformBrowser } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { environment  } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +19,9 @@ export class App {
 
   ngOnInit() {
     if (!isPlatformBrowser(this.pid)) return;
-
+    const ANON = environment.supabase.anonKey;
     const send = (path: string) => {
-      const bodyObj: Record<string, unknown> = {
+      const bodyObj = {
         p_event_key: 'page_view',
         p_session_id: crypto.randomUUID(),
         p_identity: 'client',
@@ -28,22 +29,22 @@ export class App {
         p_meta: { ts: Date.now() },
         p_window_seconds: 30
       };
-      const payload = JSON.stringify(bodyObj);
       const url = 'https://api.skreeb.io/fn/record-event';
 
-      if (navigator.sendBeacon) {
-        // sendBeacon 接受 Blob/DOMString
-        navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
-      } else {
-        // 回退到 fetch，body 必须是字符串
-        void fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: payload,
-          keepalive: true,
-          credentials: 'include'
-        });
-      }
+      // 统一用 fetch，带上 Cookie（给 Zero Trust 看）
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          // 你的后端如果是 Supabase Edge Function，通常需要这两头
+          'authorization': `Bearer ${ANON}`,
+          'apikey': ANON,
+        },
+        body: JSON.stringify(bodyObj),
+        keepalive: true,
+        credentials: 'include',   // ← 关键：带上 CF_Authorization
+        mode: 'cors',
+      }).catch(() => {});
     };
 
     // 首屏
