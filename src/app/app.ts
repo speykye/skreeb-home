@@ -20,9 +20,30 @@ export class App {
     if (!isPlatformBrowser(this.pid)) return;
 
     const send = (path: string) => {
-      const body = JSON.stringify({ type: 'pageview', path, ts: Date.now() });
-      navigator.sendBeacon?.('https://api.skreeb.io/fn/record-event', new Blob([body], { type: 'application/json' }))
-        || fetch('https://api.skreeb.io/fn/record-event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true });
+      const bodyObj: Record<string, unknown> = {
+        p_event_key: 'page_view',
+        p_session_id: crypto.randomUUID(),
+        p_identity: 'client',
+        p_path: path,
+        p_meta: { ts: Date.now() },
+        p_window_seconds: 30
+      };
+      const payload = JSON.stringify(bodyObj);
+      const url = 'https://api.skreeb.io/fn/record-event';
+
+      if (navigator.sendBeacon) {
+        // sendBeacon 接受 Blob/DOMString
+        navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
+      } else {
+        // 回退到 fetch，body 必须是字符串
+        void fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+          keepalive: true,
+          credentials: 'include'
+        });
+      }
     };
 
     // 首屏
