@@ -47,16 +47,18 @@
             <h2 class="h2">Recent changes</h2>
             <small class="muted">Kept transparent. Updated as we ship.</small>
         </div>
-        <!-- <ul class="list">
+        <ul class="list">
             @for (c of recentChanges; track $index) {
             <li>
                 @if (c.href) {
                 <a [routerLink]="c.href">{{ c.text }}</a>
+                } @else if (c.url) {
+                    <a [href]="c.url" target="_blank">{{ c.text }}</a>
                 } @else {
                 {{ c.text }}
                 }
             </li>
             }
-        </ul> -->
+        </ul>
     </section>
 </section>

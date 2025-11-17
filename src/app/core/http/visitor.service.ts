@@ -21,6 +21,6 @@ export class VisitorService {
 
   // 你也可以把语言做切换持久化
   get locale() {
-    return this.storage.getItem('sk_locale') || navigator.language || 'en';
+    return this.storage.getItem('sk_locale') || 'en';
   }
 }

@@ -1,16 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { RecordEventService } from '../../core/services/record-event.service';
 import { firstValueFrom } from 'rxjs';
 import { UniversalStorage } from '../../core/universal-storage.service';
 
-type ChangeItem = { text: string, href?: string };
+type ChangeItem = { text: string, href?: string, url?: string };
 type Identity = 'client' | 'creator';
 
 
 @Component({
   selector: 'app-about',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './about.html',
   styleUrl: './about.scss',
 })
@@ -42,10 +42,11 @@ export class About {
 
   recentChanges: ChangeItem[] = [
     { text: 'US-first market focus; bilingual support for CN–US users' },
-    { text: 'Passkey-first authentication; email fallback' },
+    { text: 'email-first; Passkey authentication fallback' },
     { text: 'Fee Schedule (tiers + caps) published and versioned', href: '/whitepaper' },
     { text: 'First-run role selection modal (Client / Creator)' },
     { text: 'One-page Whitepaper live; Company nav refined', href: '/whitepaper' },
+    { text: 'FeeLens live', url: 'https://feelen.skreeb.io' }
   ];
 
   async ngOnInit() {
