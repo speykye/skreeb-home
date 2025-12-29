@@ -15,7 +15,7 @@ import {
 })
 export class CommissionTier {
   // ====== Inputs ======
-  @Input() title = 'Tiered commission 10% → 3% (Tier-4 cap $1,000 / order)';
+  @Input() title = 'Tiered commission (per order, on Platform Base) — 10% → 3% (Tier-4 Cap: US$1,000)';
   @Input() symbol = '$';
   @Input() decimals = 2;
 
