@@ -15,7 +15,7 @@ import {
 })
 export class CommissionTier {
   // ====== Inputs ======
-  @Input() title = 'Tiered commission (per order)';
+  @Input() title = 'Tiered commission 10% → 3% (Tier-4 cap $1,000 / order)';
   @Input() symbol = '$';
   @Input() decimals = 2;
 
@@ -23,18 +23,18 @@ export class CommissionTier {
   @Input() set tiers(val: RateTier[]) { if (val?.length) this._tiers.set(val); }
   get tiers() { return this._tiers(); }
 
-  // NOTE: global cap disabled (0); only Tier 4 defines capCents: 100000
+  // NOTE: global cap disabled (0); only Tier 4 (3%) defines capCents: 100000
   private _capCents = signal<number>(0);
   @Input() set capCents(val: number) { this._capCents.set(val ?? 0); }
   get capCents() { return this._capCents(); }
 
-  private _amountMajor = signal<number>(750); // order gross for estimator UI
+  private _amountMajor = signal<number>(750); // order gross (UI input)
   @Input() set amount(val: number | null | undefined) { if (val != null) this._amountMajor.set(val); }
   get amount() { return this._amountMajor(); }
 
-  // Pass-through & base mode (to illustrate §18.1 Platform Base)
-  @Input() baseMode: BaseMode = 'net';
-  @Input() storeBps = 0;             // e.g. 1500 for 15% app-store
+  // Pass-through & base mode
+  @Input() baseMode: BaseMode = 'gross'; // safer default for standalone use
+  @Input() storeBps = 0;
   @Input() storeFixedCents = 0;
   @Input() bankBps = 0;
   @Input() bankFixedCents = 0;
@@ -72,7 +72,7 @@ export class CommissionTier {
 
   // Tier-4 cap (10% only)
   tier4CapCents() {
-    const t = this._tiers().find(x => x.bps === 1000 && typeof x.capCents === 'number');
+    const t = this._tiers().find(x => x.bps === 300 && typeof x.capCents === 'number');
     return t?.capCents ?? 0;
   }
 

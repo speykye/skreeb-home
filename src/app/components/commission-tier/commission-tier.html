@@ -1,63 +1,82 @@
 <div class="paper tier">
-    <div class="tier__header">
-        <h3>{{ title }}</h3>
-        <div class="tier__input">
-            <label for="amount" style="color: #FFF;">Order amount (Platform Base)</label>
-            <div class="money">
-                <span class="symbol">{{ symbol }}</span>
-                <input id="amount" type="number" inputmode="decimal" [value]="amount"
-                    (input)="updateAmountFromInput($any($event.target).value)" />
-            </div>
-            <div class="kpi__note" style="color: #FFF;">Platform Base = order total − pass-through fees − taxes</div>
-        </div>
+  <div class="tier__header">
+    <h3>{{ title }}</h3>
+
+    <div class="tier__input">
+      <label for="amount" style="color:#FFF;">Order total (gross)</label>
+
+      <div class="money">
+        <span class="symbol">{{ symbol }}</span>
+        <input
+          id="amount"
+          type="number"
+          inputmode="decimal"
+          [value]="amount"
+          (input)="updateAmountFromInput($any($event.target).value)"
+        />
+      </div>
+
+      <div class="kpi__note" style="color:#FFF;">
+        Platform fee is calculated on <strong>Platform Base</strong>:
+        gross − pass-through (store/processor) − payout fees (and taxes, if applicable).
+      </div>
+    </div>
+  </div>
+
+  <div class="tier__grid">
+    <div class="kpi">
+      <div class="kpi__label">Applied tier rate</div>
+      <div class="kpi__value">{{ (breakdown().appliedBps / 100) | number:'1.0-2' }}%</div>
+      @if (breakdown().capped) {
+        <div class="kpi__note">Tier-4 cap applied</div>
+      } @else {
+        <div class="kpi__note">Based on Platform Base</div>
+      }
     </div>
 
-    <div class="tier__grid">
-        <div class="kpi">
-            <div class="kpi__label">Applied rate</div>
-            <div class="kpi__value">{{ (breakdown().appliedBps / 100) | number:'1.0-2' }}%</div>
-            @if (breakdown().capped) {
-            <div class="kpi__note">Tier-4 Cap applied</div>
-            }
-        </div>
-        <div class="kpi">
-            <div class="kpi__label">Platform fee</div>
-            <div class="kpi__value">{{ fmt(centsToMajor(breakdown().feeCents)) }}</div>
-            <div class="kpi__note">Effective {{ breakdown().effectiveRatePct | number:'1.0-2' }}% (on net base)</div>
-        </div>
-        <div class="kpi">
-            <div class="kpi__label">Creator receives</div>
-            <div class="kpi__value">{{ fmt(centsToMajor(breakdown().creatorReceivesCents)) }}</div>
-            <div class="kpi__note">After store/processor, payout, and platform fee</div>
-        </div>
+    <div class="kpi">
+      <div class="kpi__label">Platform fee</div>
+      <div class="kpi__value">{{ fmt(centsToMajor(breakdown().feeCents)) }}</div>
+      <div class="kpi__note">
+        Effective {{ breakdown().effectiveRatePct | number:'1.0-2' }}%
+        (fee ÷ Platform Base)
+      </div>
     </div>
 
-    <div class="table">
-        <div class="row head">
-            <div>Order bracket (Platform Base)</div>
-            <div>Rate</div>
-        </div>
-        @for (t of tiers; track $index) {
-        <div class="row" [class.active]="$index === breakdown().appliedTierIndex">
-            <div>{{ rangeLabel(t) }}</div>
-            <div>{{ (t.bps / 100) | number:'1.0-2' }}%</div>
-        </div>
-        }
+    <div class="kpi">
+      <div class="kpi__label">Creator receives (estimate)</div>
+      <div class="kpi__value">{{ fmt(centsToMajor(breakdown().creatorReceivesCents)) }}</div>
+      <div class="kpi__note">
+        gross − store/processor − payout fees − platform fee
+      </div>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="row head">
+      <div>Order bracket (Platform Base)</div>
+      <div>Rate</div>
     </div>
 
-    <!-- Cap display: Tier-4 only -->
-    <div class="cap">
-        @if (breakdown().appliedBps === 1000) {
-        <ng-container>
-            Tier-4 Cap: <strong>{{ fmt(centsToMajor(breakdown().capCents)) }}</strong> per order
-            @if (breakdown().capped) {
-            <span>(applied)</span>
-            }
-        </ng-container>
-        } @else {
-        <ng-template #tier4Info>
-            Tier-4 Cap (10% only): <strong>{{ fmt(centsToMajor(tier4CapCents())) }}</strong> per order
-        </ng-template>
-        }
-    </div>
+    @for (t of tiers; track $index) {
+      <div class="row" [class.active]="$index === breakdown().appliedTierIndex">
+        <div>{{ rangeLabel(t) }}</div>
+        <div>{{ (t.bps / 100) | number:'1.0-2' }}%</div>
+      </div>
+    }
+  </div>
+
+  <!-- Cap display: Tier-4 only (3% tier) -->
+  <div class="cap">
+    @if (breakdown().appliedBps === 300) {
+      <ng-container>
+        Tier-4 Cap: <strong>{{ fmt(centsToMajor(breakdown().capCents)) }}</strong> per order
+        @if (breakdown().capped) { <span>(applied)</span> }
+      </ng-container>
+    } @else {
+      <ng-container>
+        Tier-4 Cap (3% tier only): <strong>{{ fmt(centsToMajor(tier4CapCents())) }}</strong> per order
+      </ng-container>
+    }
+  </div>
 </div>

@@ -20,24 +20,24 @@ export interface RateTier {
  * amountCents here == the base used to compute platform fee.
  */
 export interface FeeComputation {
-  amountCents: number;        // platform base in cents
-  feeCents: number;           // platform fee in cents (after cap)
-  netCents: number;           // amountCents - feeCents
-  appliedTierIndex: number;   // which tier matched
-  appliedBps: number;         // rate used
-  capped: boolean;            // whether cap applied
-  capCents: number;           // cap used (Infinity => no cap)
-  effectiveRatePct: number;   // (feeCents / amountCents) * 100
+  amountCents: number; // platform base in cents
+  feeCents: number; // platform fee in cents (after cap)
+  netCents: number; // amountCents - feeCents
+  appliedTierIndex: number; // which tier matched
+  appliedBps: number; // rate used
+  capped: boolean; // whether cap applied
+  capCents: number; // cap used (Infinity => no cap)
+  effectiveRatePct: number; // (feeCents / amountCents) * 100
 }
 
 export type BaseMode = 'gross' | 'net';
 
 export interface CostOptions {
-  baseMode?: BaseMode;       // 'net' => Platform Base excludes pass-through & taxes
-  storeBps?: number;         // e.g., 1500 for 15% app-store fee
-  storeFixedCents?: number;  // fixed charge added by store/processor
-  bankBps?: number;          // payout/settlement percentage (if any)
-  bankFixedCents?: number;   // payout fixed cost
+  baseMode?: BaseMode; // 'net' => Platform Base excludes pass-through & taxes
+  storeBps?: number; // e.g., 1500 for 15% app-store fee
+  storeFixedCents?: number; // fixed charge added by store/processor
+  bankBps?: number; // payout/settlement percentage (if any)
+  bankFixedCents?: number; // payout fixed cost
 }
 
 export interface FullBreakdown extends FeeComputation {
@@ -49,23 +49,33 @@ export interface FullBreakdown extends FeeComputation {
   storeFeeCents: number;
   bankFeeCents: number;
   /** Totals */
-  totalFeesCents: number;       // store + bank + platform
+  totalFeesCents: number; // store + bank + platform
   creatorReceivesCents: number; // orderGrossCents - totalFeesCents
   baseMode: BaseMode;
 }
 
 // ---- Default tiers (USD) — thresholds align with §18 ----
 export const DEFAULT_USD_MVP_TIERS: RateTier[] = [
-  { min: 0,       max: 50_000,  bps: 300 },                 // $0.00 – $500.00 → 3%
-  { min: 50_001,  max: 300_000, bps: 500 },                 // $500.01 – $3,000.00 → 5%
-  { min: 300_001, max: 500_000, bps: 700 },                 // $3,000.01 – $5,000.00 → 7%
-  { min: 500_001,               bps: 1000, capCents: 100_000 }, // $5,000.01+ → 10%, Tier-4 Cap $1,000/order
+  // $0–$200 → 10%
+  { min: 0, max: 20_000, bps: 1000 },
+
+  // $200.01–$1,000 → 7%
+  { min: 20_001, max: 100_000, bps: 700 },
+
+  // $1,000.01–$5,000 → 5%
+  { min: 100_001, max: 500_000, bps: 500 },
+
+  // $5,000.01+ → 3% (cap $1,000)
+  { min: 500_001, bps: 300, capCents: 100_000 },
 ];
 
 /** Global cap disabled; use per-tier cap (only Tier 4 has one) */
 export const DEFAULT_USD_MVP_CAP_CENTS = 0;
 
-export function pickTier(amountCents: number, tiers: RateTier[]): { tier: RateTier; index: number } {
+export function pickTier(
+  amountCents: number,
+  tiers: RateTier[]
+): { tier: RateTier; index: number } {
   const t = tiers.find((x) => amountCents >= x.min && (x.max == null || amountCents <= x.max));
   const idx = t ? tiers.indexOf(t) : -1;
   return { tier: t ?? tiers[tiers.length - 1], index: idx >= 0 ? idx : tiers.length - 1 };
@@ -87,7 +97,7 @@ export function calcFee(amountCents: number, tiers: RateTier[], capCents: number
   const { tier, index } = pickTier(amountCents, tiers);
   const rawFee = Math.round((amountCents * tier.bps) / 10_000); // round to cent
   const effectiveGlobalCap = capCents && capCents > 0 ? capCents : Number.POSITIVE_INFINITY;
-  const applicableCap = (typeof tier.capCents === 'number') ? tier.capCents : effectiveGlobalCap;
+  const applicableCap = typeof tier.capCents === 'number' ? tier.capCents : effectiveGlobalCap;
 
   const feeCents = Math.min(rawFee, applicableCap);
   const netCents = amountCents - feeCents;
@@ -130,11 +140,12 @@ export function computeBreakdown(
   const pct = (x: number, bps: number) => Math.round((x * bps) / 10_000);
 
   const storeFeeCents = pct(orderGrossCents, o.storeBps) + o.storeFixedCents;
-  const bankFeeCents  = pct(orderGrossCents, o.bankBps)  + o.bankFixedCents;
+  const bankFeeCents = pct(orderGrossCents, o.bankBps) + o.bankFixedCents;
 
-  const platformBaseCents = o.baseMode === 'net'
-    ? Math.max(0, orderGrossCents - storeFeeCents - bankFeeCents)
-    : orderGrossCents;
+  const platformBaseCents =
+    o.baseMode === 'net'
+      ? Math.max(0, orderGrossCents - storeFeeCents - bankFeeCents)
+      : orderGrossCents;
 
   const fee = calcFee(platformBaseCents, tiers, capCents);
 
@@ -167,6 +178,6 @@ export function fromCents(cents: number, decimals = 2): number {
 export function formatMoney(major: number, symbol = '$', decimals = 2): string {
   return `${symbol}${major.toLocaleString(undefined, {
     minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
+    maximumFractionDigits: decimals,
   })}`;
 }

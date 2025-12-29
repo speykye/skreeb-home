@@ -16,7 +16,7 @@ export class Landing {
   private readonly roleSvc = inject(RoleService);
   readonly year = new Date().getFullYear();
   tiers: RateTier[] = DEFAULT_USD_MVP_TIERS;
-  capCents = 0; // IMPORTANT: only Tier 4 has cap per tier config
+  capCents = 1000 * 100; // IMPORTANT: only Tier 4 has cap per tier config
   fee?: FullBreakdown;
 
   onFee(res: FullBreakdown) { this.fee = res; }
